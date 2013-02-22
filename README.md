@@ -2,4 +2,5 @@
 ## Installation
 
 Dependencies:
-    ActionBarSherlock
+
+ActionBarSherlock
