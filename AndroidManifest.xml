@@ -15,7 +15,18 @@
         android:theme="@style/AppTheme" >
         <activity
             android:name="com.tsmsogn.stackmob.SignInActivity"
-            android:label="@string/app_name" >
+            android:label="@string/app_name"
+            android:launchMode="singleInstance" >
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="stackmob.tsmsogn.com"
+                    android:scheme="app" />
+            </intent-filter>
         </activity>
         <activity
             android:name="com.tsmsogn.stackmob.MainActivity"
@@ -38,6 +49,7 @@
             android:name="com.tsmsogn.stackmob.ResetPasswordWithTemporaryPasswordActivity"
             android:label="@string/app_name" >
         </activity>
+
     </application>
 
     <uses-permission android:name="android.permission.INTERNET" />

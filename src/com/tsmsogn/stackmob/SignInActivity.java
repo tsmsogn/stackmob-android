@@ -1,8 +1,12 @@
 package com.tsmsogn.stackmob;
 
+import oauth.signpost.commonshttp.CommonsHttpOAuthConsumer;
+import oauth.signpost.commonshttp.CommonsHttpOAuthProvider;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -29,6 +33,13 @@ public class SignInActivity extends SherlockActivity implements OnClickListener 
     private TextView mForgotYourPasswordButton;
 
     private ImageView mSignInWithTwitterImageView;
+
+    final private CommonsHttpOAuthConsumer consumer = new CommonsHttpOAuthConsumer(
+            Constants.TWITTER_CONSUMER_KEY, Constants.TWITTER_CONSUMER_SECRET);
+    final private CommonsHttpOAuthProvider provider = new CommonsHttpOAuthProvider(
+            Constants.TWITTER_REQUEST_TOKEN_ENDPOINT_URL,
+            Constants.TWITTER_ACCESS_TOKEN_ENDPOINT_URL,
+            Constants.TWITTER_AUTHORIZATION_WEBSITE_URL);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,9 +77,14 @@ public class SignInActivity extends SherlockActivity implements OnClickListener 
             signIn(getUser());
         } else if (v == mSignUpButton) {
             signUp(getUser());
-        }else if (v == mSignInWithTwitterImageView) {
-            startActivity(new Intent(this, TwitterOAuth.class));
-            finish();
+        } else if (v == mSignInWithTwitterImageView) {
+            try {
+                String authUrl = provider.retrieveRequestToken(consumer,
+                        Constants.TWITTER_CALLBACK_URL);
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(authUrl)));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         } else if (v == mForgotYourPasswordButton) {
             startActivity(new Intent(this, ForgotPasswordActivity.class));
             finish();
@@ -126,6 +142,73 @@ public class SignInActivity extends SherlockActivity implements OnClickListener 
                 Toast.makeText(ctx, txt, duration).show();
             }
         });
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+
+        Uri uri = intent.getData();
+        if (uri != null
+                && uri.toString().startsWith(Constants.TWITTER_CALLBACK_URL)) {
+            String verifier = uri
+                    .getQueryParameter(oauth.signpost.OAuth.OAUTH_VERIFIER);
+
+            try {
+                // this will populate token and token_secret in consumer
+                provider.retrieveAccessToken(consumer, verifier);
+                final String twitterToken = consumer.getToken();
+                final String twitterSecret = consumer.getTokenSecret();
+                final User user = new User();
+
+                Log.v(TAG, "twitterToken: " + twitterToken);
+                Log.v(TAG, "twitterSecret: " + twitterSecret);
+                
+                user.createWithTwitter(twitterToken, twitterSecret, new StackMobCallback() {
+                    
+                    @Override
+                    public void success(String arg0) {
+                        Log.v(TAG, arg0);
+                    }
+                    
+                    @Override
+                    public void failure(StackMobException arg0) {
+                        Log.v(TAG, arg0.getMessage());
+                    }
+                });
+
+//                user.loginWithTwitter(twitterToken, twitterSecret,
+//                        new StackMobModelCallback() {
+//                            @Override
+//                            public void success() {
+//                                signIn(user);
+//                            }
+//
+//                            @Override
+//                            public void failure(StackMobException e) {
+//                                Log.v(TAG, e.getMessage());
+//                                user.createWithTwitter(twitterToken,
+//                                        twitterSecret,
+//                                        new StackMobModelCallback() {
+//                                            @Override
+//                                            public void success() {
+//                                                // signIn(user);
+//                                            }
+//
+//                                            @Override
+//                                            public void failure(
+//                                                    StackMobException e) {
+//                                            }
+//                                        });
+//                            }
+//                        });
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        }
+
     }
 
 }

@@ -69,7 +69,7 @@ public class MainActivity extends SherlockActivity implements
     }
 
     private void doLogin() {
-        Intent intent = new Intent(getApplicationContext(),
+        Intent intent = new Intent(this,
                 SignInActivity.class);
         startActivityForResult(intent, 1);
     }
@@ -158,7 +158,7 @@ public class MainActivity extends SherlockActivity implements
                 mUser.addPost(post);
                 mUser.save(StackMobOptions.depthOf(2));
                 mPostArrayAdapter.notifyDataSetChanged();
-            } else if (requestCode == 1) {
+            } else if (requestCode == 1 && resultCode == RESULT_OK) {
                 if (data.getExtras().containsKey(Constants.LOGGED_IN_USER)) {
                     mUser = User.newFromJson(User.class,
                             data.getStringExtra(Constants.LOGGED_IN_USER));
