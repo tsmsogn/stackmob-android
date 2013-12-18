@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -15,12 +16,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.actionbarsherlock.app.SherlockActivity;
 import com.stackmob.android.sdk.common.StackMobAndroid;
 import com.stackmob.sdk.callback.StackMobCallback;
 import com.stackmob.sdk.exception.StackMobException;
 
-public class SignInActivity extends SherlockActivity implements OnClickListener {
+public class SignInActivity extends ActionBarActivity implements OnClickListener {
     private static final String TAG = SignInActivity.class.getCanonicalName();
 
     private Context mContext;
@@ -43,7 +43,6 @@ public class SignInActivity extends SherlockActivity implements OnClickListener 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        setTheme(Constants.THEME);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
 

@@ -1,16 +1,16 @@
 package com.tsmsogn.stackmob;
 
 import android.content.Intent;
+import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.actionbarsherlock.app.SherlockActivity;
 import com.stackmob.sdk.api.StackMobOptions;
 import com.stackmob.sdk.exception.StackMobException;
 
-public class AddPostActivity extends SherlockActivity implements
+public class AddPostActivity extends ActionBarActivity implements
         OnClickListener {
 
     private View mSaveButton;
@@ -19,7 +19,6 @@ public class AddPostActivity extends SherlockActivity implements
     private Post mPost = new Post();
 
     protected void onCreate(android.os.Bundle savedInstanceState) {
-        setTheme(Constants.THEME);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_post);
 

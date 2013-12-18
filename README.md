@@ -3,4 +3,4 @@
 
 Dependencies:
 
-ActionBarSherlock
+ActionBarActivity
