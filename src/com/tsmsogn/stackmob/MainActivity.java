@@ -2,19 +2,21 @@ package com.tsmsogn.stackmob;
 
 import java.util.List;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.SubMenu;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.actionbarsherlock.app.SherlockActivity;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuItem;
-import com.actionbarsherlock.view.SubMenu;
 import com.stackmob.android.sdk.common.StackMobAndroid;
 import com.stackmob.sdk.api.StackMob;
 import com.stackmob.sdk.api.StackMobOptions;
@@ -24,7 +26,7 @@ import com.stackmob.sdk.exception.StackMobException;
 import com.tsmsogn.stackmob.PostActionDailog.PostActionDailogCallback;
 import com.tsmsogn.stackmob.PostArrayAdapter.PostArrayAdapterCallback;
 
-public class MainActivity extends SherlockActivity implements
+public class MainActivity extends ActionBarActivity implements
         OnItemClickListener {
     private static final String TAG = MainActivity.class.getCanonicalName();
     private static final int MENU_ID_MENU1 = (Menu.FIRST + 1);
@@ -37,7 +39,6 @@ public class MainActivity extends SherlockActivity implements
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        setTheme(Constants.THEME);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -104,6 +105,7 @@ public class MainActivity extends SherlockActivity implements
         super.onDestroy();
     }
 
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
